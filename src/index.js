@@ -14,6 +14,7 @@ function validCoordinate(point){
 }
 
 export function checkPossibleMoves(point){
+    if(!(point instanceof Coordinate)) throw Error("checkPossibleMoves must take in a Coordinate as an argument.");
     const offsets = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
     let validMoves = [];
 
@@ -21,13 +22,23 @@ export function checkPossibleMoves(point){
         const xOffset = offsets[i][0];
         const yOffset = offsets[i][1];
         const currMove = new Coordinate(point.x + xOffset, point.y + yOffset);
-
         if(validCoordinate(currMove)){
             validMoves.push(currMove);
         }
     }
 
     return validMoves;
+}
+
+function contains(array, point){
+    if(!(point instanceof Coordinate)) throw Error("contains must take in a Coordinate as the second argument.");
+    for(let i = 0; i < array.length; i++){ 
+        if(array[i].x === point.x && array[i].y === point.y){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 export function knightMoves(start, end){
@@ -39,10 +50,19 @@ export function knightMoves(start, end){
     let visited = [];
 
     visitQueue.push(start);
-
-    while(visitQueue.length != 0){
-        checkPossibleMoves(visit[0]);
+    while(!contains(visited, end)){
+        const moves = checkPossibleMoves(visitQueue[0]);
+        for(let i = 0; i < moves.length; i++){
+            if(!contains(visited, moves[i])){
+                console.log(moves[i]);
+                visitQueue.push(moves[i]);
+            }
+        }
         visited.push(visitQueue[0]);
         visitQueue.splice(0, 1);
     }
+
+    return visited;
 }
+
+console.log(knightMoves(new Coordinate(0,0), new Coordinate(2, 4)));
