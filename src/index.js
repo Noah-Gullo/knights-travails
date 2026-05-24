@@ -87,4 +87,17 @@ export function knightMoves(start, end){
     return pathArray;
 }
 
-console.log(knightMoves(new Coordinate(0,0,null), new Coordinate(7,7,null)));
+function printPath(pathArray){
+    let start = pathArray[0];
+    let end = pathArray[pathArray.length - 1];
+    let argString = "knightMoves([" + start[0] + "," + start[1] + "], " + "[" + end[0] + "," + end[1] + "])";
+    let pathCountString = "You made it in " + (pathArray.length - 1) + " moves! Here's your path:\n";
+    console.log(argString + " => " + pathCountString + "");
+
+    for(let i = 0; i < pathArray.length; i++){
+        let point = pathArray[i];
+        console.log("[" + point[0] + "," + point[1] + "]");
+    }
+}
+
+printPath(knightMoves(new Coordinate(0,0,null), new Coordinate(1,1,null)));
