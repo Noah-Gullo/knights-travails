@@ -52,6 +52,17 @@ function parsePath(array){
     return result;
 }
 
+function convertToArray(path){
+    let array = []
+    for(let i = 0; i < path.length; i++){
+        let point = [];
+        point[0] = path[i].x;
+        point[1] = path[i].y; 
+        array.push(point);
+    }
+    return array;
+}
+
 export function knightMoves(start, end){
     if(!(start instanceof Coordinate) || !(end instanceof Coordinate)) throw Error("knightMoves argument must be two Coordinates.");
     if(!validCoordinate(start)) throw Error("Starting coordinate is out of bounds.");
@@ -72,7 +83,8 @@ export function knightMoves(start, end){
         visitQueue.splice(0, 1);
     }
     let path = parsePath(visited);
-    return path;
+    let pathArray = convertToArray(path);
+    return pathArray;
 }
 
 console.log(knightMoves(new Coordinate(0,0,null), new Coordinate(7,7,null)));
