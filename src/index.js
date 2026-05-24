@@ -1,7 +1,8 @@
 export class Coordinate{
-    constructor(x, y){
+    constructor(x, y, parent){
         this.x = x;
         this.y = y;
+        this.parent = parent;
     }
 }
 
@@ -21,7 +22,7 @@ export function checkPossibleMoves(point){
     for(let i = 0; i < offsets.length; i++){
         const xOffset = offsets[i][0];
         const yOffset = offsets[i][1];
-        const currMove = new Coordinate(point.x + xOffset, point.y + yOffset);
+        const currMove = new Coordinate(point.x + xOffset, point.y + yOffset, point);
         if(validCoordinate(currMove)){
             validMoves.push(currMove);
         }
@@ -41,6 +42,16 @@ function contains(array, point){
     return false;
 }
 
+function parsePath(array){
+    let result = [];
+    let currNode = array[array.length - 1];
+    while(currNode != null){
+        result.unshift(currNode);
+        currNode = currNode.parent;
+    }
+    return result;
+}
+
 export function knightMoves(start, end){
     if(!(start instanceof Coordinate) || !(end instanceof Coordinate)) throw Error("knightMoves argument must be two Coordinates.");
     if(!validCoordinate(start)) throw Error("Starting coordinate is out of bounds.");
@@ -54,15 +65,14 @@ export function knightMoves(start, end){
         const moves = checkPossibleMoves(visitQueue[0]);
         for(let i = 0; i < moves.length; i++){
             if(!contains(visited, moves[i])){
-                console.log(moves[i]);
                 visitQueue.push(moves[i]);
             }
         }
         visited.push(visitQueue[0]);
         visitQueue.splice(0, 1);
     }
-
-    return visited;
+    let path = parsePath(visited);
+    return path;
 }
 
-console.log(knightMoves(new Coordinate(0,0), new Coordinate(2, 4)));
+console.log(knightMoves(new Coordinate(0,0,null), new Coordinate(7,7,null)));
